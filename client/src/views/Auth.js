@@ -4,6 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useContext } from "react";
 import { Redirect } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
+import { Fragment } from "react";
 
 const Auth = ({ authRoute }) => {
   const {
@@ -22,13 +23,13 @@ const Auth = ({ authRoute }) => {
     return <Redirect to="/dashboard" />;
   } else {
     body = (
-      <>
+      <Fragment>
         {authRoute === "login" && <LoginForm />}
         {authRoute === "register" && <RegisterForm />}
-      </>
+      </Fragment>
     );
   }
-  
+
   return (
     <div className="landing">
       <div className="dark-overlay">
