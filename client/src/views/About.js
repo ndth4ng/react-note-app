@@ -3,7 +3,7 @@ import { Row, Col, Button } from "react-bootstrap";
 
 const About = () => {
   return (
-    <Row className="mt-5">
+    <Row className="mt-5" style={{marginRight: 0}}>
       <Col className="text-center">
         <Button
           variant="primary"
