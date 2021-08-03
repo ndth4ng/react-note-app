@@ -1,5 +1,4 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Button, Form, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -43,29 +42,35 @@ const LoginForm = () => {
     <>
       <Form className="my-4" onSubmit={login}>
         <AlertMessage info={alert} />
-
-        <Form.Group className="mb-3">
-          <Form.Control
-            onChange={onChangeLoginForm}
-            type="text"
-            placeholder="Username"
-            name="username"
-            value={username}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Control
-            onChange={onChangeLoginForm}
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={password}
-            required
-          />
-        </Form.Group>
-
+        <Row className="justify-content-center">
+          <Col md={5} sm={8} xs={10}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                onChange={onChangeLoginForm}
+                className=""
+                type="text"
+                placeholder="Username"
+                name="username"
+                value={username}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col md={5} sm={8} xs={10}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                onChange={onChangeLoginForm}
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={password}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
         <Button variant="success" type="submit">
           Login
         </Button>
