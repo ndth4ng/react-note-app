@@ -3,6 +3,8 @@ import {
   Spinner,
   Card,
   Button,
+  Row,
+  Col,
   OverlayTrigger,
   Tooltip,
   Toast,
@@ -15,7 +17,7 @@ import AddPostModal from "../components/posts/AddPostModal";
 import UpdatePostModal from "../components/posts/UpdatePostModal";
 import DeletePostModal from "../components/posts/DeletePostModal";
 import addIcon from "../assets/plus-circle-fill.svg";
-import Masonry from "react-masonry-css";
+// import Masonry from "react-masonry-css";
 
 import PostService from "../services/PostService";
 
@@ -92,7 +94,7 @@ const Dashboard = () => {
   } else {
     body = (
       <>
-        <Masonry
+        {/* <Masonry
           breakpointCols={breakPoints}
           className="my-masonry-grid mt-3 px-3"
           columnClassName="my-masonry-grid_column"
@@ -102,7 +104,18 @@ const Dashboard = () => {
               <SinglePost post={post} />
             </div>
           ))}
-        </Masonry>
+        </Masonry> */}
+
+        <Row className="mt-3 mx-3">
+          {state.list.map((post) => (
+            <Col
+              key={post._id}
+              className="col-sm-6 col-md-4 col-xl-3 mb-4 d-flex"
+            >
+              <SinglePost post={post} />
+            </Col>
+          ))}
+        </Row>
 
         {/* Open Add Post Modal */}
         <OverlayTrigger

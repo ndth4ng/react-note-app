@@ -40,7 +40,7 @@ const SinglePost = ({
             </Col>
           </Row>
         </Card.Title>
-        <Card.Text className="">{description}</Card.Text>
+        <Card.Text className="post-description">{description}</Card.Text>
       </Card.Body>
       <Card.Footer className="text-muted">{updatedAt}</Card.Footer>
     </Card>
