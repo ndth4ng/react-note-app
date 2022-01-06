@@ -55,7 +55,7 @@ const RegisterForm = () => {
               <Form.Control
                 onChange={onChangeRegisterForm}
                 type="text"
-                placeholder="Username"
+                placeholder="Tài khoản"
                 name="username"
                 value={username}
                 required
@@ -70,7 +70,7 @@ const RegisterForm = () => {
               <Form.Control
                 onChange={onChangeRegisterForm}
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 name="password"
                 value={password}
                 required
@@ -85,7 +85,7 @@ const RegisterForm = () => {
               <Form.Control
                 onChange={onChangeRegisterForm}
                 type="password"
-                placeholder="Comfirm Password"
+                placeholder="Xác nhận mật khẩu"
                 name="confirmPassword"
                 value={confirmPassword}
                 required
@@ -95,14 +95,14 @@ const RegisterForm = () => {
         </Row>
 
         <Button variant="success" type="submit">
-          Register
+          Đăng ký
         </Button>
       </Form>
       <p>
-        Already have an account?
+        Đã có tài khoản?
         <Link to="/login">
           <Button variant="info" size="sm" className="ms-2">
-            Login
+            Đăng nhập
           </Button>
         </Link>
       </p>

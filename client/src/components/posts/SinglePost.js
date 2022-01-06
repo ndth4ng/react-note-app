@@ -1,45 +1,48 @@
-import { Card, Button, Row, Col, Badge } from "react-bootstrap";
+import { Card, Row, Col, Badge } from "react-bootstrap";
 import ActionButtons from "./ActionButtons";
 
-const SinglePost = ({ post: { _id, status, title, description, url } }) => {
+const SinglePost = ({
+  post: { _id, status, title, description, updatedAt },
+}) => {
   return (
     <Card
-      className="shadow"
+      className="shadow w-100"
       border={
-        status === "LEARNED"
+        status === "HOÀN THÀNH"
           ? "success"
-          : status === "LEARNING"
+          : status === "ĐANG THỰC HIỆN"
           ? "warning"
           : "danger"
       }
     >
+      <Card.Header>
+        <h6 className="post-title text-center">{title}</h6>
+      </Card.Header>
       <Card.Body>
         <Card.Title>
-          <Row>
-            <Col>
-              <p className="post-title">{title}</p>
+          <Row className="text-md-center">
+            <Col className="mb-3 col-6 col-md-12 col-xl-6">
               <Badge
                 pill
                 bg={
-                  status === "LEARNED"
+                  status === "HOÀN THÀNH"
                     ? "success"
-                    : status === "LEARNING"
+                    : status === "ĐANG THỰC HIỆN"
                     ? "warning"
                     : "danger"
                 }
               >
-                  {status}
+                {status}
               </Badge>
             </Col>
-            <Col className="text-end">
-                <ActionButtons url={url} _id={_id} />
+            <Col className="mb-3 text-end text-xl-end text-md-center col-6 col-md-12 col-xl-6">
+              <ActionButtons _id={_id} />
             </Col>
           </Row>
         </Card.Title>
-        <Card.Text>
-            {description}
-        </Card.Text>
+        <Card.Text className="">{description}</Card.Text>
       </Card.Body>
+      <Card.Footer className="text-muted">{updatedAt}</Card.Footer>
     </Card>
   );
 };

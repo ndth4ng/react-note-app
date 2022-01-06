@@ -1,21 +1,25 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Spinner,
   Card,
   Button,
-  Row,
-  Col,
   OverlayTrigger,
   Tooltip,
   Toast,
 } from "react-bootstrap";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { PostContext } from "../contexts/PostContext";
+import { ModalContext } from "../contexts/ModalContext";
 import SinglePost from "../components/posts/SinglePost";
 import AddPostModal from "../components/posts/AddPostModal";
 import UpdatePostModal from "../components/posts/UpdatePostModal";
+import DeletePostModal from "../components/posts/DeletePostModal";
 import addIcon from "../assets/plus-circle-fill.svg";
+import Masonry from "react-masonry-css";
+
+import PostService from "../services/PostService";
+
+let postService = PostService.getInstance();
 
 const Dashboard = () => {
   // Contexts
@@ -26,59 +30,84 @@ const Dashboard = () => {
   } = useContext(AuthContext);
 
   const {
-    postState: { post, posts, postsLoading },
-    getPosts,
+    showAddPostModal,
     setShowAddPostModal,
+    showUpdatePostModal,
+    showDeletePostModal,
     showToast: { show, message, type },
     setShowToast,
-  } = useContext(PostContext);
+  } = useContext(ModalContext);
 
-  // Get all posts
-  useEffect(() => getPosts(), []);
+  const [state, setState] = useState({
+    list: [],
+    loading: true,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await postService.getPosts();
+      setState((prev) => ({
+        ...prev,
+        list: data,
+        loading: false,
+      }));
+    };
+    fetchData();
+  }, [showAddPostModal, showUpdatePostModal, showDeletePostModal]);
 
   let body = null;
+  const breakPoints = {
+    default: 4,
+    1100: 3,
+    768: 2,
+    576: 1,
+  };
 
-  if (postsLoading) {
+  if (state.loading) {
     body = (
       <div className="spinner-container">
         <Spinner animation="border" variant="info" />
       </div>
     );
-  } else if (posts.length === 0) {
+  } else if (state.list.length === 0) {
     body = (
-      <>
-        <Card className="text-center mx-5 my-5">
+      <div className="d-flex justify-content-center">
+        <Card className="text-center mx-2 my-5">
           <Card.Header as="h1">Hi {username}</Card.Header>
           <Card.Body>
-            <Card.Title>Welcome to LearnIt</Card.Title>
+            <Card.Title>Hiện tại bạn chưa có ghi chú nào cả</Card.Title>
             <Card.Text>
-              Click the button below to track your first skill to learn
+              Chọn nút bên dưới để thêm ghi chú đầu tiên của bạn.
             </Card.Text>
           </Card.Body>
           <Button
             variant="primary"
             onClick={setShowAddPostModal.bind(this, true)}
           >
-            LearnIt
+            Thêm một ghi chú
           </Button>
         </Card>
-      </>
+      </div>
     );
   } else {
     body = (
       <>
-        <Row className="row-cols-1 row-cols-md-3 g-4 mx-auto mt-3">
-          {posts.map((post) => (
-            <Col key={post._id} className="my-2">
+        <Masonry
+          breakpointCols={breakPoints}
+          className="my-masonry-grid mt-3 px-3"
+          columnClassName="my-masonry-grid_column"
+        >
+          {state.list.map((post) => (
+            <div key={post._id}>
               <SinglePost post={post} />
-            </Col>
+            </div>
           ))}
-        </Row>
+        </Masonry>
 
         {/* Open Add Post Modal */}
         <OverlayTrigger
           placement="left"
-          overlay={<Tooltip>Add a new thing to learn</Tooltip>}
+          overlay={<Tooltip>Thêm ghi chú mới</Tooltip>}
         >
           <Button
             className="btn-floating"
@@ -95,7 +124,9 @@ const Dashboard = () => {
     <>
       {body}
       <AddPostModal />
-      {post !== null && <UpdatePostModal />}
+      {showUpdatePostModal && <UpdatePostModal />}
+      {showDeletePostModal && <DeletePostModal />}
+
       {/* After post is added, show toast */}
       <Toast
         show={show}

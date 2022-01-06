@@ -1,21 +1,24 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { useContext, useState } from "react";
-import { PostContext } from "../../contexts/PostContext";
+import { ModalContext } from "../../contexts/ModalContext";
+
+import PostService from "../../services/PostService";
+
+let postService = PostService.getInstance();
 
 const AddPostModal = () => {
   // Context
 
-  const { showAddPostModal, setShowAddPostModal, addPost, setShowToast } =
-    useContext(PostContext);
+  const { showAddPostModal, setShowAddPostModal, setShowToast } =
+    useContext(ModalContext);
 
   const [newPost, setNewPost] = useState({
     title: "",
     description: "",
-    url: "",
-    status: "TO LEARN",
+    status: "CHƯA THỰC HIỆN",
   });
 
-  const { title, description, url } = newPost;
+  const { title, description } = newPost;
 
   const onHandleChange = (event) => {
     const { name, value } = event.target;
@@ -27,8 +30,7 @@ const AddPostModal = () => {
     setNewPost({
       title: "",
       description: "",
-      url: "",
-      status: "TO LEARN",
+      status: "CHƯA THỰC HIỆN",
     });
     setShowAddPostModal(false);
   };
@@ -36,7 +38,7 @@ const AddPostModal = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const { success, message } = await addPost(newPost);
+    const { success, message } = await postService.addPost(newPost);
 
     setShowToast({
       show: true,
@@ -54,7 +56,7 @@ const AddPostModal = () => {
   return (
     <Modal show={showAddPostModal} onHide={closeDialog}>
       <Modal.Header closeButton>
-        <Modal.Title>What do you want to learn?</Modal.Title>
+        <Modal.Title>Thêm ghi chú mới</Modal.Title>
       </Modal.Header>
       <Form onSubmit={onSubmit}>
         <Modal.Body>
@@ -62,10 +64,9 @@ const AddPostModal = () => {
             <Form.Control
               onChange={onHandleChange}
               type="text"
-              placeholder="Title"
+              placeholder="Tiêu đề"
               name="title"
               required
-              aria-describedby="title-help"
               value={title}
             />
             <Form.Text id="title-help" muted>
@@ -78,28 +79,18 @@ const AddPostModal = () => {
               onChange={onHandleChange}
               as="textarea"
               row={3}
-              placeholder="Description"
+              placeholder="Nội dung"
               name="description"
               value={description}
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Control
-              onChange={onHandleChange}
-              type="text"
-              placeholder="Youtube Tutorial URL"
-              name="url"
-              value={url}
             />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeDialog}>
-            Cancel
+            Hủy
           </Button>
           <Button variant="primary" type="submit">
-            LearnIt!
+            Thêm
           </Button>
         </Modal.Footer>
       </Form>

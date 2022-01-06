@@ -30,7 +30,7 @@ const NavbarMenu = () => {
             height="32"
             className="me-2"
           />
-          LearnIt
+          NoteApp
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -56,7 +56,7 @@ const NavbarMenu = () => {
             <Button
               onClick={logout}
               variant="secondary"
-              className="fw-bolder text-white"
+              className="fw-bolder text-white ms-3"
             >
               <img
                 src={logoutIcon}
@@ -65,7 +65,7 @@ const NavbarMenu = () => {
                 height="32"
                 className="me-2"
               />
-              Logout
+              Thoát
             </Button>
           </Nav>
         </Navbar.Collapse>

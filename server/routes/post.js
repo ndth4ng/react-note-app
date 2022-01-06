@@ -3,6 +3,7 @@ const router = express.Router();
 const verifyToken = require("../middleware/auth");
 
 const Post = require("../models/Post");
+const moment = require("moment");
 
 // @router GET api/posts
 // @desc Get post
@@ -23,26 +24,27 @@ router.get("/", verifyToken, async (req, res) => {
 // @desc create post
 // @access private
 router.post("/", verifyToken, async (req, res) => {
-  const { title, description, url, status } = req.body;
+  const { title, description, status } = req.body;
 
   // Simple validation
   if (!title)
-    return res
-      .status(400)
-      .json({ success: false, message: "Title is required" });
+    return res.status(400).json({ success: false, message: "Thiếu tiêu đề" });
 
   try {
     const newPost = new Post({
       title,
       description,
-      url: (url.startsWith("https://") ? url : `https://${url}`) || "",
-      status: status || "TO LEARN",
+      status: status || "CHƯA THỰC HIỆN",
       user: req.userId,
     });
 
     await newPost.save();
 
-    res.json({ success: true, message: "Happy learning!", post: newPost });
+    res.json({
+      success: true,
+      message: "Thêm ghi chú thành công!",
+      post: newPost,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -65,8 +67,8 @@ router.put("/:id", verifyToken, async (req, res) => {
     let updatedPost = {
       title: title,
       description: description || "",
-      url: (url.startsWith("https://") ? url : `https://${url}`) || "",
-      status: status || "TO LEARN",
+      status: status || "CHƯA THỰC HIỆN",
+      updatedAt: getCurrentDateTime(),
     };
 
     const postUpdateCondition = { _id: req.params.id, user: req.userId };
@@ -86,7 +88,7 @@ router.put("/:id", verifyToken, async (req, res) => {
 
     res.json({
       success: true,
-      message: "Excellent progress!",
+      message: "Cập nhật ghi chú thành công!",
       post: updatedPost,
     });
   } catch (error) {
@@ -110,11 +112,16 @@ router.delete("/:id", verifyToken, async (req, res) => {
         message: "User not authorized or post not found!",
       });
 
-    res.json({ success: true, post: deletedPost });
+    res.json({ success: true, message: "Xóa thành công.", post: deletedPost });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
+const getCurrentDateTime = () => {
+  moment.locale("vi");
+  return moment().format("L, h:mm");
+};
 
 module.exports = router;

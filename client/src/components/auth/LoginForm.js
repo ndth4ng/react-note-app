@@ -49,7 +49,7 @@ const LoginForm = () => {
                 onChange={onChangeLoginForm}
                 className=""
                 type="text"
-                placeholder="Username"
+                placeholder="Tài khoản"
                 name="username"
                 value={username}
                 required
@@ -63,7 +63,7 @@ const LoginForm = () => {
               <Form.Control
                 onChange={onChangeLoginForm}
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 name="password"
                 value={password}
                 required
@@ -72,14 +72,14 @@ const LoginForm = () => {
           </Col>
         </Row>
         <Button variant="success" type="submit">
-          Login
+          Đăng nhập
         </Button>
       </Form>
       <p>
-        Don't have an account?
+        Không có tài khoản?
         <Link to="/register">
           <Button variant="info" size="sm" className="ms-2">
-            Register
+            Đăng ký
           </Button>
         </Link>
       </p>

@@ -46,7 +46,7 @@ router.post("/register", async (req, res) => {
 
     // All good
     const hashedPassword = await argon2.hash(password);
-    console.log;
+
     const newUser = new User({
       username: username,
       password: hashedPassword,

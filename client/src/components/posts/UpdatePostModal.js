@@ -1,25 +1,22 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import { useContext, useState, useEffect } from "react";
-import { PostContext } from "../../contexts/PostContext";
+import { useContext, useState } from "react";
+import { ModalContext } from "../../contexts/ModalContext";
+
+import PostService from "../../services/PostService";
+
+let postService = PostService.getInstance();
 
 const UpdatePostModal = () => {
   // Context
 
-  const {
-    postState: { post },
-    showUpdatePostModal,
-    setShowUpdatePostModal,
-    updatePost,
-    setShowToast,
-  } = useContext(PostContext);
+  const { showUpdatePostModal, setShowUpdatePostModal, setShowToast } =
+    useContext(ModalContext);
+
+  const post = postService.getPost();
 
   const [updatedPost, setUpdatedPost] = useState(post);
 
-  useEffect(() => {
-    setUpdatedPost(post);
-  }, [post]);
-
-  const { title, description, url, status } = updatedPost;
+  const { title, description, status } = updatedPost;
 
   const onHandleChange = (event) => {
     const { name, value } = event.target;
@@ -28,26 +25,27 @@ const UpdatePostModal = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    setShowUpdatePostModal(false);
 
-    const { success, message } = await updatePost(updatedPost);
+    console.log(updatedPost);
+    const { success, message } = await postService.updatePost(updatedPost);
 
     setShowToast({
       show: true,
       message,
       type: success ? "success" : "danger",
     });
+
+    setShowUpdatePostModal(false);
   };
 
   const closeDialog = () => {
     setShowUpdatePostModal(false);
-    setUpdatedPost(post);
   };
 
   return (
     <Modal show={showUpdatePostModal} onHide={closeDialog}>
       <Modal.Header closeButton>
-        <Modal.Title>Making progress?</Modal.Title>
+        <Modal.Title>Cập nhật ghi chú</Modal.Title>
       </Modal.Header>
       <Form onSubmit={onSubmit}>
         <Modal.Body>
@@ -70,20 +68,10 @@ const UpdatePostModal = () => {
             <Form.Control
               onChange={onHandleChange}
               as="textarea"
-              row={3}
+              rows={12}
               placeholder="Description"
               name="description"
               value={description}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Control
-              onChange={onHandleChange}
-              type="text"
-              placeholder="Youtube Tutorial URL"
-              name="url"
-              value={url}
             />
           </Form.Group>
 
@@ -94,18 +82,18 @@ const UpdatePostModal = () => {
               name="status"
               onChange={onHandleChange}
             >
-              <option value="TO LEARN">TO LEARN</option>
-              <option value="LEARNING">LEARNING</option>
-              <option value="LEARNED">LEARNED</option>
+              <option value="CHƯA THỰC HIỆN">CHƯA THỰC HIỆN</option>
+              <option value="ĐANG THỰC HIỆN">ĐANG THỰC HIỆN</option>
+              <option value="HOÀN THÀNH">HOÀN THÀNH</option>
             </Form.Control>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeDialog}>
-            Cancel
+            Hủy
           </Button>
           <Button variant="primary" type="submit">
-            LearnIt!
+            Cập nhật
           </Button>
         </Modal.Footer>
       </Form>
