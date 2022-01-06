@@ -58,12 +58,13 @@ const Dashboard = () => {
   }, [showAddPostModal, showUpdatePostModal, showDeletePostModal]);
 
   let body = null;
-  const breakPoints = {
-    default: 4,
-    1100: 3,
-    768: 2,
-    576: 1,
-  };
+
+  // const breakPoints = {
+  //   default: 4,
+  //   1100: 3,
+  //   768: 2,
+  //   576: 1,
+  // };
 
   if (state.loading) {
     body = (
