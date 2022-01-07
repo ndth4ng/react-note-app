@@ -21,8 +21,7 @@ const PostSchema = new Schema({
   updatedAt: {
     type: String,
     default: () => {
-      moment.locale("vi");
-      return moment().format("L, h:mm");
+      return moment().utcOffset("7").format("L, h:mm");
     },
   },
 });

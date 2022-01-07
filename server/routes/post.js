@@ -120,8 +120,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
 });
 
 const getCurrentDateTime = () => {
-  moment.locale("vi");
-  return moment().format("L, h:mm");
+  return moment().utcOffset("7").format("L, h:mm");
 };
 
 module.exports = router;
