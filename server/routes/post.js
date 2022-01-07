@@ -61,7 +61,7 @@ router.put("/:id", verifyToken, async (req, res) => {
   if (!title)
     return res
       .status(400)
-      .json({ success: false, message: "Title is required" });
+      .json({ success: false, message: "Tiêu đề của ghi chú là bắt buộc." });
 
   try {
     let updatedPost = {

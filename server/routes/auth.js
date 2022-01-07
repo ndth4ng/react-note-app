@@ -33,16 +33,17 @@ router.post("/register", async (req, res) => {
   if (!username || !password)
     return res
       .status(400)
-      .json({ success: false, message: "Invalid username or password" });
+      .json({ success: false, message: "Vui lòng nhập đầy đủ thông tin." });
 
   try {
     // Check for existing user
     const user = await User.findOne({ username: username });
 
     if (user)
-      return res
-        .status(400)
-        .json({ success: false, message: "Username already exists" });
+      return res.status(400).json({
+        success: false,
+        message: "Tài khoản đã tồn tại, vui lòng chọn tài khoản khác.",
+      });
 
     // All good
     const hashedPassword = await argon2.hash(password);
@@ -61,7 +62,7 @@ router.post("/register", async (req, res) => {
 
     res.json({
       success: true,
-      message: "User created successfully",
+      message: "Tạo tài khoản thành công.",
       accessToken: accessToken,
     });
   } catch (err) {
@@ -81,22 +82,24 @@ router.post("/login", async (req, res) => {
   if (!username || !password)
     return res
       .status(400)
-      .json({ success: false, message: "Invalid username or password" });
+      .json({ success: false, message: "Vui lòng nhập đầy đủ thông tin." });
 
   try {
     // Check for existing user
     const user = await User.findOne({ username: username });
     if (!user)
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect username or password" });
+      return res.status(400).json({
+        success: false,
+        message: "Tài khoản hoặc mật khẩu không chính xác.",
+      });
 
     // Username found
     const passwordValid = await argon2.verify(user.password, password);
     if (!passwordValid) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect username or password" });
+      return res.status(400).json({
+        success: false,
+        message: "Tài khoản hoặc mật khẩu không chính xác.",
+      });
     } else {
       // All good
       // Return token
@@ -107,7 +110,7 @@ router.post("/login", async (req, res) => {
 
       res.json({
         success: true,
-        message: "Signed in successfully",
+        message: "Đăng nhập thành công.",
         accessToken: accessToken,
       });
     }
